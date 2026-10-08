@@ -1,0 +1,12 @@
+# Preserve existing GitHub Pages branch build, publishing only public assets/pages.
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - scripts
+  - templates
+  - tests
+  - supabase
+  - docs
+  - README.md
+  - .env.example
