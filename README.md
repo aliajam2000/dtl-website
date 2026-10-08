@@ -1,9 +1,56 @@
-# DTL Public Website — Research-first redesign
+# Development Technology Lab
 
-Open `index.html` locally or deploy the root directory to GitHub Pages. `/portal` is intentionally closed and partner application is disabled until a secure backend is reviewed. See `docs/SECURITY_AND_DEPLOYMENT.md` for remaining steps. This is **not** a completed Supabase integration.
+Research-first public website at https://aliajam2000.github.io/dtl-website/.
+Warm off-white, navy, restrained green; five public navigation pages, privacy
+notice and a closed portal. Early-stage status and impact claims are explicit.
 
-## v3 Dark Edition
-- Dark navy / deep slate with restrained mint accent, improved typography and responsive navigation.
-- Public site is deployable as a static site on GitHub Pages.
-- Application submission and private portal remain **disabled** pending reviewed Supabase permissions, backend, and consent/privacy readiness.
-- Never upload credentials or participant records to this repository.
+## Run and edit
+
+```sh
+python3 scripts/build.py
+python3 -m http.server 8000
+```
+
+Open `http://localhost:8000/`. Content lives in `templates/`; shared layout and
+metadata in `scripts/build.py`; design in `style.css`. Commit generated HTML after
+editing templates. The public site needs no Node runtime or external fonts.
+
+To check the real deployment base path, serve the repository's parent directory
+and open `/dtl-website/`. Directory routes preserve normal links and refresh.
+
+## Verify
+
+Python 3 and Node 22+ are required for checks. Node dependencies are test-only.
+
+```sh
+npm ci
+npm run build
+npm test
+```
+
+The SQL tests use an isolated local PGlite Postgres database with synthetic data.
+They never contact Supabase. Frontend tests use a DOM harness and mocked transport;
+handler tests inject mock provider/database adapters. See the verification report
+for the exact boundary between local tests and live verification.
+
+## Intake is implemented, not activated
+
+`config.js` keeps public applications closed. The staged Supabase migration and
+Edge Function implement a separate, least-privilege intake path with validation,
+server-verified Turnstile, atomic quota/deduplication, and pending review status.
+No live database migration, schema audit, or function deployment is implied.
+
+The project needs authenticated Supabase access, secure backend configuration,
+Turnstile configuration, a verified privacy contact and operational privacy
+notice, and successful live tests before activation. No email provider or
+notification recipient is configured. Do not collect participant data here.
+
+The `/portal/` page is closed information only. It is not an authenticated portal
+or functional demonstration. Household functionality remains gated pending
+actual-schema discovery and authorization tests.
+
+- [Deployment and security runbook](docs/SECURITY_AND_DEPLOYMENT.md)
+- [Read-only schema inspection](docs/SCHEMA_INSPECTION.sql)
+- [Verification results](docs/VERIFICATION.md)
+
+No credentials or participant data belong in this repository.

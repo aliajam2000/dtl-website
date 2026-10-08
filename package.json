@@ -1,0 +1,17 @@
+{
+  "name": "dtl-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static DTL research website with a separately deployed, gated Supabase intake endpoint",
+  "scripts": {
+    "build": "python3 scripts/build.py",
+    "test": "node --test tests/*.test.mjs && python3 scripts/check_site.py"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "linkedom": "0.18.12"
+  }
+}
