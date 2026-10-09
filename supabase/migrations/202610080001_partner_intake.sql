@@ -78,9 +78,9 @@ alter function dtl_intake.submit_application(jsonb,uuid,text) owner to dtl_intak
 SET LOCAL ROLE dtl_intake_owner;
 revoke all on function dtl_intake.submit_application(jsonb,uuid,text) from public, anon, authenticated, service_role;
 grant execute on function dtl_intake.submit_application(jsonb,uuid,text) to dtl_intake_writer;
+revoke create on schema dtl_intake from dtl_intake_owner;
 RESET ROLE;
 revoke dtl_intake_owner from postgres;
-revoke create on schema dtl_intake from dtl_intake_owner;
 alter default privileges in schema dtl_intake revoke all on tables from public, anon, authenticated, service_role;
 alter default privileges in schema dtl_intake revoke execute on functions from public, anon, authenticated, service_role;
 commit;
