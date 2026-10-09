@@ -41,16 +41,18 @@ for the exact boundary between local tests and live verification.
 
 ## Intake is implemented, not activated
 
-`config.js` keeps public applications closed. The staged Supabase migration and
-Edge Function implement a separate, least-privilege intake path with validation,
+`config.js` keeps public applications closed. The Supabase intake migration was applied to the live project on 9 October 2026;
+its Edge Function code is committed but NOT deployed. These components implement a separate, least-privilege intake path with validation,
 server-verified Turnstile, atomic quota/deduplication, and pending review status.
-The live schema was inspected read-only on 9 October 2026. No live database
-migration or function deployment has been executed.
+The live schema was inspected on 9 October 2026. The `dtl_intake` tables and
+restricted function have been created and verified; no Edge Function deployment
+has been completed, and `applicationsEnabled` remains false.
 
-Supabase access is now connected. The project still needs approval for the
-prepared production migration, secure backend configuration,
-Turnstile configuration, a verified privacy contact and operational privacy
-notice, and successful live tests before activation. No email provider or
+Supabase access is now connected. Before activation, the project still needs a dedicated restricted LOGIN and TLS
+connection secret, function deployment, Turnstile configuration, a verified
+privacy contact and finalized privacy notice, and successful live denial/intake
+tests. A function deployment attempt was blocked by execution safety checks;
+no completed deployment is claimed. No email provider or
 notification recipient is configured. Do not collect participant data here.
 
 The `/portal/` page is closed information only. It is not an authenticated portal
