@@ -7,8 +7,13 @@ The public site can launch independently. `config.js` intentionally has
 portal is a non-collecting closed page. Neither the frontend flag nor a static
 page is an authorization mechanism: the backend must enforce every restriction.
 No Supabase migration or function has been applied to the live project during
-this implementation. The existing `observatory` catalog has not been inspected.
-The two unspecified tables in the supplied brief remain unknown.
+this implementation. The existing `observatory` catalog was inspected read-only on 9 October 2026.
+The two unspecified tables are `assessments` and `audit_events`. All 11 tables
+have RLS enabled, no row policies, and postgres-only table/schema grants.
+No public/observatory SQL functions were found. This is a closed starting state,
+not verified role-scoped portal authorization. The attempted intake migration
+was rejected by automatic approval review as a production security mutation;
+it was not applied. Explicit user approval is required before retrying.
 
 ## Architecture
 

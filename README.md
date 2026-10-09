@@ -28,6 +28,12 @@ npm run build
 npm test
 ```
 
+The Edge Function can be type-checked after `npm ci` with:
+
+```sh
+npx --yes deno@2.5.4 check --node-modules-dir=manual supabase/functions/partner-apply/index.ts
+```
+
 The SQL tests use an isolated local PGlite Postgres database with synthetic data.
 They never contact Supabase. Frontend tests use a DOM harness and mocked transport;
 handler tests inject mock provider/database adapters. See the verification report
@@ -38,9 +44,11 @@ for the exact boundary between local tests and live verification.
 `config.js` keeps public applications closed. The staged Supabase migration and
 Edge Function implement a separate, least-privilege intake path with validation,
 server-verified Turnstile, atomic quota/deduplication, and pending review status.
-No live database migration, schema audit, or function deployment is implied.
+The live schema was inspected read-only on 9 October 2026. No live database
+migration or function deployment has been executed.
 
-The project needs authenticated Supabase access, secure backend configuration,
+Supabase access is now connected. The project still needs approval for the
+prepared production migration, secure backend configuration,
 Turnstile configuration, a verified privacy contact and operational privacy
 notice, and successful live tests before activation. No email provider or
 notification recipient is configured. Do not collect participant data here.

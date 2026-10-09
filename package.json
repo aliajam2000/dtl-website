@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
-    "linkedom": "0.18.12"
+    "linkedom": "0.18.12",
+    "postgres": "3.4.7"
   }
 }
