@@ -6,14 +6,18 @@ The public site can launch independently. `config.js` intentionally has
 `applicationsEnabled: false`. `INTAKE_ENABLED` defaults to false. The household
 portal is a non-collecting closed page. Neither the frontend flag nor a static
 page is an authorization mechanism: the backend must enforce every restriction.
-No Supabase migration or function has been applied to the live project during
-this implementation. The existing `observatory` catalog was inspected read-only on 9 October 2026.
+On 9 October 2026, the `partner_intake_v1` migration and a function-privileges
+repair migration were applied to live Supabase. The Edge Function has NOT been
+deployed; a deployment attempt was blocked by execution safety checks. The existing `observatory` catalog was inspected read-only on 9 October 2026.
 The two unspecified tables are `assessments` and `audit_events`. All 11 tables
 have RLS enabled, no row policies, and postgres-only table/schema grants.
 No public/observatory SQL functions were found. This is a closed starting state,
-not verified role-scoped portal authorization. The attempted intake migration
-was rejected by automatic approval review as a production security mutation;
-it was not applied. Explicit user approval is required before retrying.
+not verified role-scoped portal authorization. The founder explicitly approved proceeding with the database and website.
+The deployed migration initially failed at function ownership change, then passed
+after a temporary role membership adjustment. A separate repair migration removed
+unexpected PUBLIC function EXECUTE privileges. Verified afterward: anon,
+authenticated, service_role cannot execute; dtl_intake_writer can execute.
+The public website form remains closed.
 
 ## Architecture
 
@@ -43,16 +47,15 @@ it was not applied. Explicit user approval is required before retrying.
    `fmlcpdlxbuhaymzvjxwu`. Use `docs/SCHEMA_INSPECTION.sql` to inspect metadata.
    Confirm all actual tables, RLS, grants, RPC security-definer functions,
    role memberships, and exposed schemas. Do not export participant rows to git.
-2. Review the staged migration in an isolated development database first.
-   The migration intentionally fails if its schema or roles already exist.
+2. The reviewed intake migration is ALREADY APPLIED to the live project.
+   Do not rerun it. The migration intentionally fails if its schema or roles already exist.
    Do not rename/drop existing objects to force it through. Compare them first.
    It does not alter any `observatory` table. Check effective privileges inherited
    from PUBLIC; if they expose existing participant tables/functions to the new
    roles, resolve with a reviewed existing-schema migration before provisioning
    a LOGIN credential. Fresh intake isolation is not evidence that existing
    Observatory authorization is safe.
-3. Apply the reviewed migration as an authorized database administrator. The SQL
-   creates a NOLOGIN writer deliberately. Provision its login/password securely
+3. The deployed SQL created a NOLOGIN writer. Provision its login/password securely
    outside git, with no extra role membership, then verify effective privileges.
    Use the project's actual direct or pooler connection details for this role.
    Do not put the postgres administrator password in `INTAKE_DATABASE_URL`.
