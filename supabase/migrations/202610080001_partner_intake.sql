@@ -1,4 +1,4 @@
--- STAGED / NOT APPLIED. Review against live catalog before running.
+-- Applied to DTL Supabase on 2026-10-09 with ownership handling; keep as reference.
 -- Intentionally separate from observatory. Does not assume ANY household columns.
 -- Fail on existing names instead of overwriting live objects.
 begin;
@@ -72,10 +72,15 @@ begin
 end $$;
 -- ALTER OWNER needs CREATE temporarily, immediately removed before commit.
 grant create on schema dtl_intake to dtl_intake_owner;
+grant dtl_intake_owner to postgres;
 alter function dtl_intake.submit_application(jsonb,uuid,text) owner to dtl_intake_owner;
-revoke create on schema dtl_intake from dtl_intake_owner;
+-- Apply function privilege changes AS owner, then restore original execution role.
+SET LOCAL ROLE dtl_intake_owner;
 revoke all on function dtl_intake.submit_application(jsonb,uuid,text) from public, anon, authenticated, service_role;
 grant execute on function dtl_intake.submit_application(jsonb,uuid,text) to dtl_intake_writer;
+RESET ROLE;
+revoke dtl_intake_owner from postgres;
+revoke create on schema dtl_intake from dtl_intake_owner;
 alter default privileges in schema dtl_intake revoke all on tables from public, anon, authenticated, service_role;
 alter default privileges in schema dtl_intake revoke execute on functions from public, anon, authenticated, service_role;
 commit;
